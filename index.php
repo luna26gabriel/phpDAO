@@ -1,13 +1,15 @@
-<form>
-    <input type="text" name="deslogin">
-    <input type="password" name="dessenha">
-    <input type="submit" value="OK">
-</form>
-
 
 <?php
 
 require_once("config.php");
+
+$usuario = new Usuario();
+
+$usuario->loadById(27);
+
+$usuario->update("Profesor", "$%¨&*");
+
+echo $usuario;
 
 /*$sql = new Sql();
 
@@ -45,6 +47,7 @@ echo $usuario;
 
 //$aluno->insert();
 
+/*
 $aluno = new Usuario();
 $usuario = array();
 $i = 0;
@@ -67,6 +70,7 @@ if(count($usuario) > 0){
     $aluno->insert();
     echo $aluno;
 }
+*/
 
 
 

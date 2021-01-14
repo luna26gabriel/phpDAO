@@ -39,6 +39,15 @@ class Usuario {
         $this->dtcadastro = $value;
     }    
 
+    public function setData($data){
+        
+        $this->setIdusuario($data['idusuario']);
+        $this->setDeslogin($data['deslogin']);
+        $this->setDessenha($data['dessenha']);
+        $this->setDtcadastro(new DateTime($data['dtcadastro']));
+
+    }
+
     public function loadById($id){
 
         $sql = new Sql();
@@ -49,8 +58,7 @@ class Usuario {
 
       //if(count($results[0]) > 0)
         if(isset($results[0])){
-            $row = $results[0];
-            $this->setData($row[0]);
+            $this->setData($results[0]);
         }
     }
 
@@ -86,16 +94,7 @@ class Usuario {
             throw new Exception("Login ou Senhas errados");            
         }
 
-    }
-
-    public function setData($data){
-        
-        $this->setIdusuario($data['idusuario']);
-        $this->setDeslogin($data['deslogin']);
-        $this->setDessenha($data['dessenha']);
-        $this->setDtcadastro(new DateTime($data['dtcadastro']));
-
-    }
+    }    
 
     public function insert(){
 
@@ -118,7 +117,7 @@ class Usuario {
 
         $sql = new Sql();
 
-        $sql->quety("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+        $sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
             ':LOGIN'=>$this->getDeslogin(),
             ':PASSWORD'=>$this->getDessenha(),
             ':ID'=>$this->getIdusuario()
