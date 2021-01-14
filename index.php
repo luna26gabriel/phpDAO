@@ -4,12 +4,17 @@
 require_once("config.php");
 
 $usuario = new Usuario();
-
-$usuario->loadById(27);
-
-$usuario->update("Profesor", "$%¨&*");
-
+$usuario->loadByID(28);
+$usuario->delete();
 echo $usuario;
+
+
+/*Update do Usuario
+$usuario = new Usuario();
+$usuario->loadById(27);
+$usuario->update("Profesor", "$%¨&*");
+echo $usuario;
+*/
 
 /*$sql = new Sql();
 
