@@ -7,7 +7,7 @@ class Usuario {
     private $dessenha;
     private $dtcadastro;
 
-    public function getIdusuario():int{
+    public function getIdusuario(){
         return $this->idusuario;
     }
 
@@ -15,7 +15,7 @@ class Usuario {
         $this->idusuario = $value;
     }
 
-    public function getDeslogin():string{
+    public function getDeslogin(){
         return $this->deslogin;
     }
 
@@ -23,7 +23,7 @@ class Usuario {
         $this->deslogin = $value;
     }
 
-    public function getDessenha():string{
+    public function getDessenha(){
         return $this->dessenha;
     }
 
@@ -37,16 +37,7 @@ class Usuario {
 
     public function setDtcadastro($value){
         $this->dtcadastro = $value;
-    }
-
-    public function __toString(){
-        return json_encode(array(
-            "idusuario" => $this->getIdusuario(),
-            "deslogin" => $this->getDeslogin(),
-            "dessenha" => $this->getDessenha(),
-            "dtcadastro" => $this->getDtcadastro()->format("d/m/Y H:i:s")
-        ));
-    }
+    }    
 
     public function loadById($id){
 
@@ -58,15 +49,8 @@ class Usuario {
 
       //if(count($results[0]) > 0)
         if(isset($results[0])){
-
             $row = $results[0];
-
-            //var_dump($row);
-
-            $this->setIdusuario($row['idusuario']);
-            $this->setDeslogin($row['deslogin']);
-            $this->setDessenha($row['dessenha']);
-            $this->setDtcadastro(new DateTime($row['dtcadastro']));
+            $this->setData($row[0]);
         }
     }
 
@@ -97,21 +81,63 @@ class Usuario {
 
       //if(count($results[0]) > 0)
         if(isset($results[0])){
-
-            $row = $results[0];
-
-            //var_dump($row);
-
-            $this->setIdusuario($row['idusuario']);
-            $this->setDeslogin($row['deslogin']);
-            $this->setDessenha($row['dessenha']);
-            $this->setDtcadastro(new DateTime($row['dtcadastro']));
+            $this->setData($results[0]);            
         } else {
-
-            throw new Exception("Login ou Senhas errados");
-            
+            throw new Exception("Login ou Senhas errados");            
         }
 
+    }
+
+    public function setData($data){
+        
+        $this->setIdusuario($data['idusuario']);
+        $this->setDeslogin($data['deslogin']);
+        $this->setDessenha($data['dessenha']);
+        $this->setDtcadastro(new DateTime($data['dtcadastro']));
+
+    }
+
+    public function insert(){
+
+        $sql = new Sql();
+
+        $results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+            ':LOGIN' => $this->getDeslogin(),
+            ':PASSWORD' => $this->getDessenha()
+        ));
+
+        if(count($results) > 0){
+            $this->setData($results[0]);
+        }
+    }
+
+    public function update($login, $password){
+
+        $this->setDeslogin($login);
+        $this->setDessenha($password);
+
+        $sql = new Sql();
+
+        $sql->quety("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+            ':LOGIN'=>$this->getDeslogin(),
+            ':PASSWORD'=>$this->getDessenha(),
+            ':ID'=>$this->getIdusuario()
+        ));
+
+    }
+
+    public function __construct($login = "", $password = ""){
+        $this->setDeslogin($login);
+        $this->setDessenha($password);    
+    }
+
+    public function __toString(){
+        return json_encode(array(
+            "idusuario" => $this->getIdusuario(),
+            "deslogin" => $this->getDeslogin(),
+            "dessenha" => $this->getDessenha(),
+            "dtcadastro" => $this->getDtcadastro()->format("d/m/Y H:i:s")
+        ));
     }
 }
 
