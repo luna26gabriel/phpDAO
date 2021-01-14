@@ -49,7 +49,6 @@ class Usuario {
 
       //if(count($results[0]) > 0)
         if(isset($results[0])){
-            $row = $results[0];
             $this->setData($row[0]);
         }
     }
