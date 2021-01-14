@@ -58,7 +58,11 @@ class Usuario {
 
       //if(count($results[0]) > 0)
         if(isset($results[0])){
+<<<<<<< HEAD
             $this->setData($results[0]);
+=======
+            $this->setData($row[0]);
+>>>>>>> b6604db143fd079610b904a94aaf38f8ee5c124f
         }
     }
 
